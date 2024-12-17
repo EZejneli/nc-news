@@ -18,15 +18,14 @@ const SortBy = styled(FormControl)(({ theme }) => ({
   minWidth: 200,
 }));
 
-const Filters = () => {
+const Filters = ({ onSortChange, onCategoryChange, selectedCategory }) => {
   const [categories, setCategories] = useState([]);
-  const [sortBy, setSortBy] = useState('');
+  const [sortBy, setSortBy] = useState('created_at');
 
   useEffect(() => {
     fetch('https://emir-ncnews.onrender.com/api/topics')
       .then((response) => response.json())
       .then((data) => {
-        console.log('Categories response:', data);
         setCategories(data.topics);
       })
       .catch((error) => {
@@ -34,22 +33,41 @@ const Filters = () => {
       });
   }, []);
 
+  const handleSortChange = (event) => {
+    const value = event.target.value;
+    setSortBy(value);
+    onSortChange(value);
+  };
+
+  const handleCategoryClick = (slug) => {
+    onCategoryChange(slug === selectedCategory ? null : slug);
+  };
+
   return (
     <FiltersContainer>
       <Categories>
-        {Array.isArray(categories) && categories.length > 0 ? (
-          categories.map((category, index) => (
-            <Button variant="contained" key={index}>{category.slug}</Button>
-          ))
-        ) : (
-          <Button variant="contained" disabled>No categories available</Button>
-        )}
+        <Button 
+          variant={!selectedCategory ? "contained" : "outlined"}
+          onClick={() => handleCategoryClick(null)}
+        >
+          All
+        </Button>
+        {categories.map((category) => (
+          <Button
+            variant={category.slug === selectedCategory ? "contained" : "outlined"}
+            key={category.slug}
+            onClick={() => handleCategoryClick(category.slug)}
+          >
+            {category.slug}
+          </Button>
+        ))}
       </Categories>
       <SortBy variant="outlined">
         <InputLabel>Sort By</InputLabel>
-        <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)} label="Sort By">
-          <MenuItem value="date">Date</MenuItem>
+        <Select value={sortBy} onChange={handleSortChange} label="Sort By">
+          <MenuItem value="created_at">Date</MenuItem>
           <MenuItem value="votes">Votes</MenuItem>
+          <MenuItem value="comment_count">Comments</MenuItem>
         </Select>
       </SortBy>
     </FiltersContainer>

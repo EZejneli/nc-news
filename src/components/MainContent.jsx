@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, Button, Typography, Paper } from '@mui/material';
-import ArticleList from './ArticleList';
+import ArticleList from './Articles/ArticlesList';
 
 const MainContent = () => {
   const [mainArticle, setMainArticle] = useState(null);
