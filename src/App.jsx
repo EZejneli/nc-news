@@ -14,7 +14,6 @@ const App = () => {
         <Container maxWidth="lg" sx={{ flexGrow: 1, mt: 2, px: 2 }}>
           <Routes>
             <Route path="/" element={<><Filters /><MainContent /></>} />
-            {/* Add other routes here */}
           </Routes>
         </Container>
         <Footer />
