@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardMedia } from '@mui/material';
 import ArticleInfo from './ArticleInfo';
 
-const MainArticle = ({ image, title, author, votes, date }) => {
+const FeaturedArticle = ({ image, title, author, votes, date }) => {
   return (
     <Card>
       <CardMedia component="img" height="300" image={image} alt={title} />
@@ -18,4 +18,4 @@ const MainArticle = ({ image, title, author, votes, date }) => {
   );
 };
 
-export default MainArticle;
+export default FeaturedArticle;

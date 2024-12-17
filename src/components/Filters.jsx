@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -19,16 +19,35 @@ const SortBy = styled(FormControl)(({ theme }) => ({
 }));
 
 const Filters = () => {
+  const [categories, setCategories] = useState([]);
+  const [sortBy, setSortBy] = useState('');
+
+  useEffect(() => {
+    fetch('https://emir-ncnews.onrender.com/api/topics')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Categories response:', data);
+        setCategories(data.topics);
+      })
+      .catch((error) => {
+        console.error('Error fetching categories:', error);
+      });
+  }, []);
+
   return (
     <FiltersContainer>
       <Categories>
-        <Button variant="contained">Football</Button>
-        <Button variant="contained">Coding</Button>
-        <Button variant="contained">Cooking</Button>
+        {Array.isArray(categories) && categories.length > 0 ? (
+          categories.map((category, index) => (
+            <Button variant="contained" key={index}>{category.slug}</Button>
+          ))
+        ) : (
+          <Button variant="contained" disabled>No categories available</Button>
+        )}
       </Categories>
       <SortBy variant="outlined">
         <InputLabel>Sort By</InputLabel>
-        <Select label="Sort By">
+        <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)} label="Sort By">
           <MenuItem value="date">Date</MenuItem>
           <MenuItem value="votes">Votes</MenuItem>
         </Select>

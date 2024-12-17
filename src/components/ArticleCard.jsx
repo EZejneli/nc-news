@@ -1,24 +1,19 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Card, CardMedia } from '@mui/material';
+import ArticleInfo from './ArticleInfo';
 
 const ArticleCard = ({ image, title, author, votes, date }) => {
   return (
     <Card>
-      <CardMedia component="img" height="140" image={image} alt={title} />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          By {author}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Votes: {votes}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {date}
-        </Typography>
-      </CardContent>
+      {image && <CardMedia component="img" height="140" image={image} alt={title} />}
+      <ArticleInfo 
+        title={title} 
+        author={author} 
+        votes={votes} 
+        date={date} 
+        titleVariant="h5" 
+        authorVariant="body2" 
+      />
     </Card>
   );
 };
