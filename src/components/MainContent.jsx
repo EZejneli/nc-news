@@ -1,73 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Grid, Button, Typography, Paper } from '@mui/material';
-
-const sampleArticles = [
-  {
-    image: 'https://via.placeholder.com/150',
-    title: 'Sample Article 1',
-    author: 'Author 1',
-    votes: 10,
-    date: '2023-10-01',
-  },
-  {
-    image: 'https://via.placeholder.com/150',
-    title: 'Sample Article 2',
-    author: 'Author 2',
-    votes: 20,
-    date: '2023-10-02',
-  },
-];
+import ArticleList from './ArticleList';
 
 const MainContent = () => {
+  const [mainArticle, setMainArticle] = useState(null);
+  const [sampleArticles, setSampleArticles] = useState([]);
+
+  useEffect(() => {
+    fetch('https://emir-ncnews.onrender.com/api/articles?sort_by=votes&order=desc&limit=1')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Main article response:', data);
+        setMainArticle(data.articles[0]);
+      })
+      .catch((error) => {
+        console.error('Error fetching main article:', error);
+      });
+
+    fetch('https://emir-ncnews.onrender.com/api/articles?sort_by=votes&order=desc&limit=2&offset=1')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Sample articles response:', data);
+        setSampleArticles(data.articles);
+      })
+      .catch((error) => {
+        console.error('Error fetching sample articles:', error);
+      });
+  }, []);
+
   return (
     <Box>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Paper sx={{ padding: 2 }}>
-            <Typography variant="h4">Main Article</Typography>
-            <img src="https://via.placeholder.com/600x400" alt="Main Article" style={{ width: '100%', height: 'auto' }} />
-            <Typography variant="body1">This is the main article content...</Typography>
-            <Typography variant="body2">Votes: 30</Typography>
-            <Typography variant="body2">Author: Main Author</Typography>
-            <Typography variant="body2">Created: 2023-10-01</Typography>
-          </Paper>
-        </Grid>
+        {mainArticle && (
+          <Grid item xs={12}>
+            <Paper sx={{ padding: 2 }}>
+              <Typography variant="h4">{mainArticle.title}</Typography>
+              <img src={mainArticle.article_img_url} alt="Main Article" style={{ width: '100%', height: 'auto' }} />
+              <Typography variant="body1">{mainArticle.body}</Typography>
+              <Typography variant="body2">Votes: {mainArticle.votes}</Typography>
+              <Typography variant="body2">Author: {mainArticle.author}</Typography>
+              <Typography variant="body2">Created: {mainArticle.created_at}</Typography>
+            </Paper>
+          </Grid>
+        )}
         {sampleArticles.map((article, index) => (
           <Grid item xs={6} sm={6} key={index}>
             <Paper sx={{ padding: 2 }}>
               <Typography variant="h5">{article.title}</Typography>
-              <img src={article.image} alt={article.title} style={{ width: '100%', height: 'auto' }} />
-              <Typography variant="body1">This is the sample article content...</Typography>
+              <img src={article.article_img_url} alt={article.title} style={{ width: '100%', height: 'auto' }} />
+              <Typography variant="body1">{article.body}</Typography>
               <Typography variant="body2">Votes: {article.votes}</Typography>
               <Typography variant="body2">Author: {article.author}</Typography>
-              <Typography variant="body2">Created: {article.date}</Typography>
+              <Typography variant="body2">Created: {article.created_at}</Typography>
             </Paper>
           </Grid>
         ))}
-        <Grid item xs={12} sm={6} md={4}>
-          <Paper sx={{ padding: 2 }}>
-            <Typography variant="h6">Article Title</Typography>
-            <Typography variant="body2">Votes: 10</Typography>
-            <Typography variant="body2">Author: John Doe</Typography>
-            <Typography variant="body2">Created: 2023-10-01</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <Paper sx={{ padding: 2 }}>
-            <Typography variant="h6">Article Title</Typography>
-            <Typography variant="body2">Votes: 8</Typography>
-            <Typography variant="body2">Author: Jane Smith</Typography>
-            <Typography variant="body2">Created: 2023-10-02</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <Paper sx={{ padding: 2 }}>
-            <Typography variant="h6">Article Title</Typography>
-            <Typography variant="body2">Votes: 15</Typography>
-            <Typography variant="body2">Author: Alice Johnson</Typography>
-            <Typography variant="body2">Created: 2023-10-03</Typography>
-          </Paper>
-        </Grid>
       </Grid>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
         <Button variant="contained">Load More</Button>
