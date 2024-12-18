@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import ArticleCard from './ArticleCard';
 import ArticlesList from './ArticlesList';
+import Filters from '../Filters';
+import { fetchArticles } from '../services/api';
 
 const ArticlesPage = () => {
   const [articles, setArticles] = useState([]);
+  const [category, setCategory] = useState('all');
+  const [sortBy, setSortBy] = useState('created_at');
 
   useEffect(() => {
-    fetch('https://emir-ncnews.onrender.com/api/articles')
-      .then((response) => response.json())
+    fetchArticles(category, sortBy)
       .then((data) => {
         console.log('Fetched articles:', data.articles);
         setArticles(data.articles);
@@ -15,7 +18,7 @@ const ArticlesPage = () => {
       .catch((error) => {
         console.error('Error fetching articles:', error);
       });
-  }, []);
+  }, [category, sortBy]);
 
   if (articles.length === 0) {
     return <div>Loading...</div>;
@@ -30,6 +33,7 @@ const ArticlesPage = () => {
 
   return (
     <div>
+      <Filters onSelectCategory={setCategory} onSortChange={setSortBy} />
       <ArticleCard
         image={mainArticle.article_img_url}
         title={mainArticle.title}

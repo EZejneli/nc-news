@@ -1,76 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { fetchTopics } from '../services/api';
 
-const FiltersContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: theme.spacing(2),
-}));
-
-const Categories = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(1),
-}));
-
-const SortBy = styled(FormControl)(({ theme }) => ({
-  minWidth: 200,
-}));
-
-const Filters = ({ onSortChange, onCategoryChange, selectedCategory }) => {
+const Filters = ({ onSelectCategory, onSortChange }) => {
   const [categories, setCategories] = useState([]);
   const [sortBy, setSortBy] = useState('created_at');
 
   useEffect(() => {
-    fetch('https://emir-ncnews.onrender.com/api/topics')
-      .then((response) => response.json())
-      .then((data) => {
-        setCategories(data.topics);
+    fetchTopics()
+      .then((fetchedTopics) => {
+        setCategories(['all', ...fetchedTopics.map(topic => topic.slug)]);
       })
       .catch((error) => {
-        console.error('Error fetching categories:', error);
+        console.error('Error fetching topics:', error);
       });
   }, []);
 
   const handleSortChange = (event) => {
-    const value = event.target.value;
-    setSortBy(value);
-    onSortChange(value);
-  };
-
-  const handleCategoryClick = (slug) => {
-    onCategoryChange(slug === selectedCategory ? null : slug);
+    setSortBy(event.target.value);
+    onSortChange(event.target.value);
   };
 
   return (
-    <FiltersContainer>
-      <Categories>
-        <Button 
-          variant={!selectedCategory ? "contained" : "outlined"}
-          onClick={() => handleCategoryClick(null)}
+    <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+      {categories.map((category) => (
+        <Button
+          key={category}
+          variant="contained"
+          onClick={() => onSelectCategory(category)}
+          sx={{ mx: 1 }}
         >
-          All
+          {category}
         </Button>
-        {categories.map((category) => (
-          <Button
-            variant={category.slug === selectedCategory ? "contained" : "outlined"}
-            key={category.slug}
-            onClick={() => handleCategoryClick(category.slug)}
-          >
-            {category.slug}
-          </Button>
-        ))}
-      </Categories>
-      <SortBy variant="outlined">
+      ))}
+      <FormControl sx={{ ml: 2 }}>
         <InputLabel>Sort By</InputLabel>
-        <Select value={sortBy} onChange={handleSortChange} label="Sort By">
+        <Select value={sortBy} onChange={handleSortChange}>
           <MenuItem value="created_at">Date</MenuItem>
           <MenuItem value="votes">Votes</MenuItem>
-          <MenuItem value="comment_count">Comments</MenuItem>
         </Select>
-      </SortBy>
-    </FiltersContainer>
+      </FormControl>
+    </Box>
   );
 };
 
