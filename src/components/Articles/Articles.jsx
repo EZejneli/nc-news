@@ -3,7 +3,7 @@ import MainArticle from './MainArticle';
 import ArticleCard from './ArticleCard';
 import { Grid } from '@mui/material';
 
-const Articles = memo(() => {
+const Articles = memo(({ username }) => {
   const [articles, setArticles] = useState([]);
   const [mainArticle, setMainArticle] = useState(null);
   const [otherArticles, setOtherArticles] = useState([]);
@@ -23,7 +23,7 @@ const Articles = memo(() => {
 
   return (
     <div className="articles-container">
-      <MainArticle article={mainArticle} />
+      <MainArticle article={mainArticle} username={username} />
       <Grid container spacing={2} sx={{ mt: 2 }}>
         {otherArticles.map((article) => (
           <Grid item xs={12} sm={6} md={4} key={article.article_id}>

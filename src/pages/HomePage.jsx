@@ -2,11 +2,11 @@ import React from 'react';
 import Filters from '../components/Filters';
 import Articles from '../components/Articles/Articles';
 
-const HomePage = () => {
+const HomePage = ({ username }) => {
   return (
     <>
       <Filters />
-      <Articles />
+      <Articles username={username} />
     </>
   );
 };

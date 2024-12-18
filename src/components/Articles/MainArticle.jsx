@@ -12,12 +12,17 @@ const MainArticle = ({ article }) => {
   const isHomePage = location.pathname === '/';
 
   return (
-    <Box>
+    <Box role="article" aria-label={`Article: ${article.title}`}>
       <Card 
         sx={{ 
           mb: 4,
           cursor: isHomePage ? 'pointer' : 'default',
-          '&:hover': isHomePage ? { transform: 'scale(1.01)', transition: 'transform 0.2s' } : {}
+          '&:hover': isHomePage ? { 
+            transform: 'scale(1.01)', 
+            transition: 'transform 0.2s',
+            boxShadow: 3
+          } : {},
+          backgroundColor: 'background.paper',
         }}
         onClick={isHomePage ? () => navigate(`/articles/${article.article_id}`) : undefined}
       >
@@ -28,7 +33,16 @@ const MainArticle = ({ article }) => {
           alt={article.title}
         />
         <CardContent>
-          <Typography gutterBottom variant="h3" component="div">
+          <Typography 
+            gutterBottom 
+            variant="h3" 
+            component="h1"
+            color="text.primary"
+            sx={{ 
+              fontWeight: 'bold',
+              fontSize: { xs: '1.75rem', sm: '2.5rem' }
+            }}
+          >
             {article.title}
           </Typography>
           <Stack direction="row" spacing={2} alignItems="center" mb={2}>

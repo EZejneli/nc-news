@@ -33,3 +33,16 @@ export const updateArticleVotes = async (articleId, increment) => {
   const data = await response.json();
   return data.article;
 };
+
+export const postComment = async (articleId, username, body) => {
+  const response = await fetch(`${BASE_URL}/articles/${articleId}/comments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, body }),
+  });
+  if (!response.ok) throw new Error('Failed to post comment');
+  const data = await response.json();
+  return data.comment;
+};
