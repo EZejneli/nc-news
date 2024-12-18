@@ -20,3 +20,16 @@ export const fetchComments = async (articleId) => {
   const data = await response.json();
   return data.comments;
 };
+
+export const updateArticleVotes = async (articleId, increment) => {
+  const response = await fetch(`${BASE_URL}/articles/${articleId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ inc_votes: increment }),
+  });
+  if (!response.ok) throw new Error('Failed to update votes');
+  const data = await response.json();
+  return data.article;
+};

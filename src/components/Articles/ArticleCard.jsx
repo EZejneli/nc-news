@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 
-const ArticleCard = memo(({ article }) => {
+const ArticleCard = ({ article }) => {
   const navigate = useNavigate();
 
   return (
@@ -32,6 +32,6 @@ const ArticleCard = memo(({ article }) => {
       </CardContent>
     </Card>
   );
-});
+};
 
 export default ArticleCard;

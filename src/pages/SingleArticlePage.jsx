@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React from 'react';
 import SingleArticle from '../components/Articles/SingleArticle';
 
-const SingleArticlePage = memo(() => {
+const SingleArticlePage = () => {
   return <SingleArticle />;
-});
+};
 
 export default SingleArticlePage;
