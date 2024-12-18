@@ -7,15 +7,10 @@ export const fetchTopics = async () => {
   return data.topics;
 };
 
-export const fetchArticles = async (category, sortBy) => {
-  const url = new URL(`${BASE_URL}/articles`);
-  if (category && category !== 'all') {
-    url.searchParams.append('topic', category);
-  }
-  if (sortBy) {
-    url.searchParams.append('sort_by', sortBy);
-  }
-
+export const fetchArticles = async (category, sortBy = 'created_at', order = 'desc') => {
+  let url = `${BASE_URL}/articles?`;
+  if (category) url += `topic=${category}&`;
+  url += `sort_by=${sortBy}&order=${order}`;
   const response = await fetch(url);
   if (!response.ok) throw new Error('Failed to fetch articles');
   const data = await response.json();
