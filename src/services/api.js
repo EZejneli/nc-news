@@ -1,45 +1,43 @@
-const API_URL = 'https://emir-ncnews.onrender.com/api';
+const BASE_URL = 'https://emir-ncnews.onrender.com/api';
 
-export const fetchTopics = () => {
-  return fetch(`${API_URL}/topics`).then((response) => {
-    if (!response.ok) {
-      throw new Error('Failed to fetch topics');
-    }
-    return response.json();
-  });
+export const fetchTopics = async () => {
+  const response = await fetch(`${BASE_URL}/topics`);
+  if (!response.ok) throw new Error('Failed to fetch topics');
+  const data = await response.json();
+  return data.topics;
 };
 
-export const fetchArticles = (category, sortBy) => {
-  const url = new URL(`${API_URL}/articles`);
-  if (category !== 'all') {
+export const fetchArticles = async (category, sortBy) => {
+  const url = new URL(`${BASE_URL}/articles`);
+  if (category && category !== 'all') {
     url.searchParams.append('topic', category);
   }
-  url.searchParams.append('sort_by', sortBy);
+  if (sortBy) {
+    url.searchParams.append('sort_by', sortBy);
+  }
 
-  return fetch(url).then((response) => {
-    if (!response.ok) {
-      throw new Error('Failed to fetch articles');
-    }
-    return response.json();
-  });
+  const response = await fetch(url);
+  if (!response.ok) throw new Error('Failed to fetch articles');
+  const data = await response.json();
+  return data.articles;
 };
 
 export const fetchArticleById = async (id) => {
-  const response = await fetch(`${API_URL}/articles/${id}`);
+  const response = await fetch(`${BASE_URL}/articles/${id}`);
   if (!response.ok) throw new Error('Article not found');
   const data = await response.json();
   return data.article;
 };
 
 export const fetchComments = async (articleId) => {
-  const response = await fetch(`${API_URL}/articles/${articleId}/comments`);
+  const response = await fetch(`${BASE_URL}/articles/${articleId}/comments`);
   if (!response.ok) throw new Error('Failed to fetch comments');
   const data = await response.json();
   return data.comments;
 };
 
 export const updateArticleVotes = async (articleId, increment) => {
-  const response = await fetch(`${API_URL}/articles/${articleId}`, {
+  const response = await fetch(`${BASE_URL}/articles/${articleId}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -76,11 +74,4 @@ export const fetchArticlesByTopic = async (topic, sortBy = 'created_at', order =
   if (!response.ok) throw new Error('Failed to fetch articles by topic');
   const data = await response.json();
   return data.articles;
-};
-
-export const fetchTopics = async () => {
-  const response = await fetch(`${BASE_URL}/topics`);
-  if (!response.ok) throw new Error('Failed to fetch topics');
-  const data = await response.json();
-  return data.topics;
 };
