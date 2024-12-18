@@ -1,24 +1,19 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Box, Container } from '@mui/material';
-import Header from './components/Header';
-import Filters from './components/Filters';
-import Articles from './components/Articles/Articles';
-import Footer from './components/Footer';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import HomePage from './pages/HomePage';
+import SingleArticlePage from './pages/SingleArticlePage';
 
 const App = () => {
   return (
-    <Router>
-      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <Header />
-        <Container maxWidth="lg" sx={{ flexGrow: 1, mt: 2, px: 2 }}>
-          <Routes>
-            <Route path="/" element={<><Filters /><Articles /></>} />
-          </Routes>
-        </Container>
-        <Footer />
-      </Box>
-    </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="articles/:article_id" element={<SingleArticlePage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 
