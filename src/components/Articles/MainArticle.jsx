@@ -1,7 +1,10 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Box, Stack } from '@mui/material';
+import CommentIcon from '@mui/icons-material/Comment';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import Comments from '../Comments/Comments';
+import VoteButtons from './VoteButtons';
 
 const MainArticle = ({ article }) => {
   const navigate = useNavigate();
@@ -28,9 +31,32 @@ const MainArticle = ({ article }) => {
           <Typography gutterBottom variant="h3" component="div">
             {article.title}
           </Typography>
-          <Typography variant="body1" color="text.secondary">
-            By {article.author} | {new Date(article.created_at).toLocaleDateString()} | {article.votes} votes
-          </Typography>
+          <Stack direction="row" spacing={2} alignItems="center" mb={2}>
+            <Typography variant="body1" color="text.secondary">
+              By {article.author} | {new Date(article.created_at).toLocaleDateString()}
+            </Typography>
+            <Stack direction="row" spacing={3} alignItems="center">
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <ThumbUpIcon color="action" />
+                <Typography variant="body2">{article.votes}</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <CommentIcon color="action" />
+                <Typography variant="body2">{article.comment_count}</Typography>
+              </Box>
+            </Stack>
+          </Stack>
+          {!isHomePage && (
+            <Typography variant="body1" paragraph sx={{ mt: 2, mb: 3 }}>
+              {article.body}
+            </Typography>
+          )}
+          {!isHomePage && (
+            <VoteButtons 
+              articleId={article.article_id} 
+              initialVotes={article.votes} 
+            />
+          )}
         </CardContent>
       </Card>
       {!isHomePage && <Comments article_id={article.article_id} />}
