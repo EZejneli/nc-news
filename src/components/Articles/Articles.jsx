@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import MainArticle from './MainArticle';
 import ArticleCard from './ArticleCard';
 import { Grid } from '@mui/material';
 
-const Articles = () => {
+const Articles = memo(() => {
   const [articles, setArticles] = useState([]);
   const [mainArticle, setMainArticle] = useState(null);
   const [otherArticles, setOtherArticles] = useState([]);
@@ -33,6 +33,6 @@ const Articles = () => {
       </Grid>
     </div>
   );
-};
+});
 
 export default Articles;
