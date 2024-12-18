@@ -1,8 +1,8 @@
-const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://emir-ncnews.onrender.com/api';
+const BASE_URL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_BASE_URL : '';
 
 export const fetchArticles = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/articles`);
+    const response = await fetch(`${BASE_URL}/api/articles`);
     if (!response.ok) throw new Error('Failed to fetch articles');
     const data = await response.json();
     return data.articles;
@@ -14,7 +14,7 @@ export const fetchArticles = async () => {
 
 export const fetchArticleById = async (id) => {
   try {
-    const response = await fetch(`${BASE_URL}/articles/${id}`);
+    const response = await fetch(`${BASE_URL}/api/articles/${id}`);
     if (!response.ok) throw new Error('Article not found');
     const data = await response.json();
     return data.article;
@@ -26,7 +26,7 @@ export const fetchArticleById = async (id) => {
 
 export const fetchComments = async (articleId) => {
   try {
-    const response = await fetch(`${BASE_URL}/articles/${articleId}/comments`);
+    const response = await fetch(`${BASE_URL}/api/articles/${articleId}/comments`);
     if (!response.ok) throw new Error('Failed to fetch comments');
     const data = await response.json();
     return data.comments;
@@ -34,4 +34,4 @@ export const fetchComments = async (articleId) => {
     console.error(`Error fetching comments for article with id ${articleId}:`, error);
     throw error;
   }
-};
+}; 
