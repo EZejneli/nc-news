@@ -22,6 +22,10 @@ const Comments = ({ article_id, username }) => {
     setComments((currentComments) => [newComment, ...currentComments]);
   };
 
+  const handleDeleteComment = (commentId) => {
+    setComments((currentComments) => currentComments.filter(comment => comment.comment_id !== commentId));
+  };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -48,14 +52,19 @@ const Comments = ({ article_id, username }) => {
       </Box>
       <Divider sx={{ mb: 2 }} />
       {comments.map((comment) => (
-        <CommentCard key={comment.comment_id} comment={comment} />
+        <CommentCard 
+          key={comment.comment_id} 
+          comment={comment} 
+          username={username} 
+          onDelete={handleDeleteComment} 
+        />
       ))}
       <CommentPopover
         anchorEl={anchorEl}
         handleClose={handleClose}
         articleId={article_id}
         onCommentPosted={handleNewComment}
-        username={username} // Pass the username prop
+        username={username}
       />
     </Box>
   );

@@ -6,7 +6,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import Comments from '../Comments/Comments';
 import VoteButtons from './VoteButtons';
 
-const MainArticle = ({ article }) => {
+const MainArticle = ({ article, username }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
@@ -73,7 +73,7 @@ const MainArticle = ({ article }) => {
           )}
         </CardContent>
       </Card>
-      {!isHomePage && <Comments article_id={article.article_id} />}
+      {!isHomePage && <Comments article_id={article.article_id} username={username} />}
     </Box>
   );
 };
